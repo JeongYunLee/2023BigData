@@ -34,7 +34,7 @@ def pca(df):
     return principalDf
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "http://127.0.0.1:8081"}})
+CORS(app, resources={r"/*": {"origins": "*"}})
 api = Api(app)
 
 @app.route('/', methods=['GET', 'POST']) 
@@ -97,7 +97,7 @@ def make_ml_answer(*args,**kwargs):
         return  "Bad Request"
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    app.run(debug=True)
 
 
 
