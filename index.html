@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!--css-->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="/assets/main.css" />
+    <!--font-->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Prata&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <div class="main-section">
+      <h1>Used car info Helper</h1>
+
+      <div class="mb-20">
+        <h3 class="pt-5 pb-5" style="font-style: italic">
+          Enter used car details, get similar groups' details! <br />
+          Browse used car info within similar groups to make quick and easy
+          comparisons.
+        </h3>
+
+        <div class="container">
+          <a href="#gridy" style="text-decoration: none">
+            <img
+              src="/img/car.png"
+              alt=""
+              class="image hithere"
+              style="width: 100%"
+            />
+            <div class="middle">
+              <div class="text">
+                <span>Start!</span>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div id="gridy"></div>
+
+    <div id="gridy" class="second_section">
+      <h3 class="pt-5 pb-5">
+        Enter information about your car or a used car you've acquired. <br />
+        <span style="color: #00ddeb">'Year'</span> refers to the year the
+        vehicle was released. <br />
+        <span style="color: #00ddeb">'Contion'</span> refers to the state of the
+        vehicle. Enter an integer from 0 to 5. <br />
+        <span style="color: #00ddeb">'Odometer'</span> refers to the distance
+        the vehicle has traveled. <br />
+        <span style="color: #00ddeb">'Market Price'</span> refers to the price
+        the vehicle was priced at before it was sold. It is based on dollars.
+        <br />
+        <span style="color: #00ddeb">'Selling Price'</span> refers to the price
+        at which the vehicle was actually traded. It is based on dollars. <br />
+      </h3>
+      <form id="myForm" action="http://127.0.0.1:5000/">
+        <div class="mt-20 flex-container mb-3">
+          <div class="flex-item">
+            <h2 class="mb-2">Year</h2>
+            <p>
+              <span class="input">
+                <input
+                  name="year"
+                  id="year"
+                  type="number"
+                  max="2023"
+                  min="1900"
+                  required
+                  placeholder="1900 to 2023"
+                  aria-label="Amount (to the nearest dollar)"
+                />
+              </span>
+            </p>
+          </div>
+
+          <div class="flex-item">
+            <h2 class="mb-2">Condition</h2>
+            <p>
+              <span class="input">
+                <input
+                  name="condition"
+                  id="condition"
+                  type="number"
+                  required
+                  placeholder="0 to 5"
+                  max="5"
+                  min="0"
+                  aria-label="Amount (to the nearest dollar)"
+                />
+              </span>
+            </p>
+          </div>
+
+          <div class="flex-item">
+            <h2 class="mb-2">Odometer</h2>
+            <p>
+              <span class="input">
+                <input
+                  name="odometer"
+                  id="odometer"
+                  type="number"
+                  required
+                  placeholder=""
+                  max=""
+                  min="0"
+                  aria-label="Amount (to the nearest dollar)"
+                />
+              </span>
+            </p>
+          </div>
+
+          <div class="flex-item">
+            <h2 class="mb-2">Market Price</h2>
+            <p>
+              <span class="input">
+                <input
+                  name="mmr"
+                  id="mmr"
+                  type="number"
+                  required
+                  max=""
+                  min="0"
+                  aria-label="Amount (to the nearest dollar)"
+                  required
+                />
+              </span>
+            </p>
+          </div>
+
+          <div class="flex-item">
+            <h2 class="mb-2">Selling Price</h2>
+            <p>
+              <span class="input">
+                <input
+                  name="sellingprice"
+                  id="sellingprice"
+                  type="number"
+                  max=""
+                  min="0"
+                  aria-label="Amount (to the nearest dollar)"
+                />
+              </span>
+            </p>
+          </div>
+        </div>
+
+        <div class="flex-container">
+          <button type="submit" class="button-64">
+            <span class="text">Submit</span>
+          </button>
+        </div>
+      </form>
+
+      <div id="result" class="flex-container" class="text"></div>
+    </div>
+  </body>
+
+  <script>
+    document
+      .getElementById("myForm")
+      .addEventListener("submit", function (event) {
+        event.preventDefault(); // 폼 기본 동작 방지
+        console.log("hit");
+        // FormData 객체 생성
+        var formData = new FormData(this);
+
+        // Fetch API를 사용하여 AJAX 요청
+        fetch("http://127.0.0.1:5000/", {
+          method: "POST",
+          body: formData,
+        })
+          .then((response) => response.json()) // 응답을 JSON으로 변환
+          .then((data) => {
+            // 응답을 현재 페이지에 표시
+            document.getElementById("result").innerHTML = `
+            <div class="overflow-x-auto">
+              <div class="prediction_result">
+                <div style="display: flex; align-items: center; justify-content: center; width: 50%; margin: 0 auto;">
+                  <div style="width: 50%; text-align: center;">
+                    <img src="/img/predictedPrice.png" alt="" style="width: 100%;"/>
+                  </div>
+                  <div style="width: 50%; text-align: center; line-height:100%;">
+                    <h2>$ ${data.predict_price}</h2>
+                    <p><br><span style="color: gray; font-size: 0.8em; text-align: center;">(proper selling price)</span></p>
+                  </div>
+                </div>                
+              </div>
+
+              <div class="flex-contaioner">
+                <table bordercolor="" width="500" height="300" align="center" style="color: white">
+
+                  <tr>
+                    <td style="width: 22%">
+                      <img src="/img/year.png" alt="" style="width: 50%"/>
+                    </td>
+
+                    <td rowspan="2" align="center" class="table_text" valign="middle">${
+                      data.year
+                    } years
+                    </td>
+
+                    <td style="width: 22%">
+                      <img src="/img/condition.png" alt="" style="width: 50%"/>
+                    </td>
+
+                    <td rowspan="2" align="center" class="table_text" valign="middle">${
+                      data.condition
+                    } points
+                    </td>
+
+                    <td style="width: 22%">
+                      <img src="/img/odometer.png" alt="" style="width: 50%"/>
+                    </td>
+
+                    <td rowspan="2" align="center" class="table_text" valign="middle">${
+                      data.odometer
+                    } km
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>Most Years</td>
+                    <td>Mean Condition</td>
+                    <td>Mean Odometer</td>
+                  </tr>
+
+                  <tr>
+                    <td style="width: 22%">
+                      <img src="/img/make.png" alt="" style="width: 50%"/>
+                    </td>
+
+                    <td rowspan="2" align="center" class="table_text" valign="middle">${
+                      data.make
+                    }</td>
+
+                    <td style="width: 22%">
+                      <img src="/img/mmr.png" alt="" style="width: 50%"/>
+                    </td>
+
+                    <td rowspan="2" align="center" class="table_text" valign="middle">$ ${
+                      data.mmr
+                    } 
+                    </td>
+
+                    <td style="width: 22%">
+                      <img src="/img/sellingprice.png" alt="" style="width: 50%"/>
+                    </td>
+
+                    <td rowspan="2" align="center" class="table_text" valign="middle">$ ${
+                      data.sellingprice
+                    } 
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>Most Manufacturers</td>
+                    <td>Mean Market Price</td>
+                    <td>Mean Selling Price</td>
+                  </tr>
+                </table>
+              </div>
+
+              <div class="flex-contaioner; result_text">
+                <span>
+                  This is information from a group similar to the information you entered.
+                  <br>
+                  The average age of the group is ${
+                    2023 - data.year
+                  } years (as of 2023).
+                  The average condition and odometer of the group is ${
+                    data.condition
+                  } points and ${data.odometer} km.
+                  
+                  The proper price we suggested you is ${
+                    data.predict_price
+                  }. However the market price which a group similar to the details you enterted is ${
+              data.mmr
+            } dollars and the actual selling price is ${
+              data.sellingprice
+            } dollars. These prices may vary slightly, as used cars can vary even under similar conditions depending on the time of purchase, dealer, etc.
+          <br> Use this information for reference only.      
+          </span>
+              </div>
+
+            </div>
+            `;
+            // 결과 부분으로 스크롤
+            document
+              .getElementById("result")
+              .scrollIntoView({ behavior: "smooth" });
+          })
+          .catch((error) => console.error("Error:", error));
+      });
+  </script>
+</html>
